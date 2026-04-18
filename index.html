@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
     <title>CS 360 Final Project</title>
 </head>
 <body>
@@ -18,5 +21,36 @@
         demographics impact employee mental health. This project will have a total of 4 visualizations, including a geographic mapping,
         parallel coordinates, diverging bar chart, and a sunburst diagram. 
     </p>
+
+    <div class="container">
+        <section id="map-section">
+            <h3>Geographic Support Distribution</h3>
+            <p><strong>Objective:</strong> How do personal demographics and location relate to mental health support in tech?</p>
+            <p>This choropleth map visualizes the average Support Score across the United States. 
+            <div id="map-container"></div>
+        </section>
+    </div>
+
+    <div class="container">
+        <section id="bar-chart-section">
+            <h3>Support Accessibility by Company Size</h3>
+            <p><strong>Objective:</strong> How much mental health support is there in the tech industry, specifically comparing small vs. big companies?</p>
+            <p>This diverging bar chart shows specific support features, like benefits and anonymity, to show where support gaps exists.
+            <div id="bar-chart-container"></div>
+        </section>
+    </div>
+
+    <div class="container">
+        <section id="sunburst-section">
+            <h3>Prevalence of Mental Health Issues</h3>
+            <p><strong>Objective:</strong> How prevalent are mental health issues among people working in tech?</p>
+            <p>The inner ring shows the percentage of the industry seeking treatment, while the outer ring reveals how that prevalence shifts across company sizes.
+            <div id="sunburst-container"></div>
+        </section>
+    </div>
+
+    <script src="js/map.js"></script>
+    <script src="js/bar-chart.js"></script>
+    <script src="js/sunburst.js"></script>
 </body>
 </html>
