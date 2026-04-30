@@ -196,8 +196,8 @@ function updateBarChart(filterState) {
   // Update section title and substitle with sample size info
   d3.select("#bar-chart-section h3").text(
     filterState
-      ? `Support Distribution in ${filterState}`
-      : "Support Distribution by Company Size (All US)",
+      ? `Grouped Bar Chart - Mental Health Support by Company Size in ${filterState}`
+      : "Grouped Bar Chart - Mental Health Support by Company Size in the U.S.)",
   );
 
   const infoText = filterState
