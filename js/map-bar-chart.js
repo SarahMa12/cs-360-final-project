@@ -73,7 +73,7 @@ const bColor = d3
 // Loading data
 Promise.all([
   d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"),
-  d3.csv("./data/cleaned_data.csv"),
+  d3.csv("data/cleaned_data.csv"),
 ])
   .then(([topoData, csvData]) => {
     allData = csvData;

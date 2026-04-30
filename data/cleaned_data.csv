@@ -34,7 +34,7 @@ Age,self_employed,family_history,treatment,work_interfere,no_employees,remote_wo
 22,No,Yes,Yes,Often,6-25,No,Yes,Maybe,No,No,No,Male,0.0,1.0,0.0,0.0,1.0,0.0,2.0,Texas,0,1,0,2,1
 33,No,No,No,Don't know,100-500,Yes,Yes,No,Some of them,Yes,No,Male,0.5,0.5,0.5,0.5,0.5,0.5,3.0,Utah,1,1,0,4,0
 32,No,No,No,Never,1-5,Yes,Yes,Maybe,Some of them,Yes,No,Male,0.5,0.5,0.0,0.0,0.5,0.5,2.0,Tennessee,1,1,0,1,1
-27,No,Yes,Yes,Rarely,26-100,No,Yes,Maybe,No,No,No,Male,1.0,1.0,0.0,0.0,1.0,0.5,3.5,New York,0,1,0,3,1
+27,No,Yes,Yes,Rarely,26-100,No,Yes,Maybe,No,No,No,Other,1.0,1.0,0.0,0.0,1.0,0.5,3.5,New York,0,1,0,3,1
 32,No,Yes,No,Don't know,6-25,Yes,Yes,No,Yes,Yes,No,Male,0.5,0.0,0.0,0.0,0.5,0.75,1.75,Tennessee,1,1,0,2,0
 24,No,Yes,Yes,Sometimes,26-100,Yes,Yes,No,Some of them,Yes,No,Male,0.5,0.0,0.0,0.0,0.5,0.5,1.5,New York,1,1,0,3,0
 26,No,No,No,Don't know,26-100,No,No,No,Some of them,Yes,No,Male,0.0,0.0,0.0,0.0,1.0,0.75,1.75,Tennessee,0,0,0,3,0
