@@ -23,6 +23,7 @@ const labelMap = {
 };
 
 // Load data
+// SOURCE: https://gist.github.com/d3noob/06e72deea99e7b4859841f305f63ba85
 d3.csv("data/cleaned_data.csv").then(data => {
     rawData = data;
     
