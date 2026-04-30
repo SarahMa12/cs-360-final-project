@@ -13,7 +13,7 @@ const s_svg = d3.select("#sunburst-container")
     .append("g")
     .attr("transform", `translate(${(s_width / 2) + s_margin.left}, ${(s_height / 2) + s_margin.top})`);
 
-d3.csv("../cleaned_data.csv").then(data => {
+d3.csv("../data/cleaned_data.csv").then(data => {
 
     const nested = d3.groups(data, 
         d => d.treatment === "Yes" ? "Sought Treatment" : "No Treatment",
