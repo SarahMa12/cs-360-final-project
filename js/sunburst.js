@@ -1,78 +1,146 @@
+// Margins
 const s_svgWidth = 1000;
-const s_svgHeight = 600; 
-const s_margin = { top: 50, right: 200, bottom: 70, left: 120 };
+const s_svgHeight = 850;
+const s_radius = Math.min(s_svgWidth, s_svgHeight) / 2 - 60;
 
-const s_width = s_svgWidth - s_margin.left - s_margin.right;
-const s_height = s_svgHeight - s_margin.top - s_margin.bottom;
-const s_radius = Math.min(s_width, s_height) / 2;
+const s_svg = d3
+  .select("#sunburst-container")
+  .append("svg")
+  .attr("viewBox", `0 0 ${s_svgWidth} ${s_svgHeight}`)
+  .style("width", "100%")
+  .style("height", "auto")
+  .append("g")
+  .attr("transform", `translate(${s_svgWidth / 2}, ${s_svgHeight / 2})`);
 
-const s_svg = d3.select("#sunburst-container")
-    .append("svg")
-    .attr("width", s_svgWidth)
-    .attr("height", s_svgHeight)
-    .append("g")
-    .attr("transform", `translate(${(s_width / 2) + s_margin.left}, ${(s_height / 2) + s_margin.top})`);
+const s_tooltip = d3.select("#tooltip");
 
-d3.csv("data/cleaned_data.csv").then(data => {
+// Loading data
+// SOURCE: https://observablehq.com/@d3/zoomable-sunburst
+d3.csv("data/cleaned_data.csv")
+  .then((data) => {
+    // Clean data
+    const cleanedData = data
+      .map((d) => ({
+        family_history: (d.family_history || "").trim(),
+        gender: (d.Gender_Cleaned || "Other").trim(),
+        treatment: (d.treatment || "").trim(),
+      }));
 
-    const nested = d3.groups(data, 
-        d => d.treatment === "Yes" ? "Sought Treatment" : "No Treatment",
-        d => d.no_employees
+      // Create nested groups for sunburst levels
+    const nested = d3.groups(
+      cleanedData,
+      (d) =>
+        d.family_history === "Yes" ? "Family History" : "No Family History",
+      (d) => d.gender,
+      (d) => (d.treatment === "Yes" ? "Sought Treatment" : "No Treatment"),
     );
 
+    // Format data into hierarchical structure for sunburst
     const rootData = {
-        name: "OSMI Survey",
-        children: nested.map(([status, sizes]) => ({
-            name: status,
-            children: sizes.map(([size, entries]) => ({
-                name: size,
-                size: entries.length
-            }))
-        }))
+      name: "Demographics",
+      children: nested.map(([history, genderGroup]) => ({
+        name: history,
+        children: genderGroup.map(([gender, treatmentGroup]) => ({
+          name: gender,
+          children: treatmentGroup.map(([treatment, entries]) => ({
+            name: treatment,
+            size: entries.length,
+          })),
+        })),
+      })),
     };
 
-    const root = d3.hierarchy(rootData)
-        .sum(d => d.size)
-        .sort((a, b) => b.value - a.value);
+    // Layout
+    const s_root = d3
+      .hierarchy(rootData)
+      .sum((d) => d.size)
+      .sort((a, b) => b.value - a.value);
 
     const partition = d3.partition().size([2 * Math.PI, s_radius]);
-    partition(root);
+    partition(s_root);
 
-    const arc = d3.arc()
-        .startAngle(d => d.x0)
-        .endAngle(d => d.x1)
-        .innerRadius(d => d.y0)
-        .outerRadius(d => d.y1);
+    // Convert the data into SVG path coordinates
+    const arc = d3
+      .arc()
+      .startAngle((d) => d.x0)
+      .endAngle((d) => d.x1)
+      .innerRadius((d) => d.y0)
+      .outerRadius((d) => d.y1)
+      .padAngle(0.015)
+      .cornerRadius(2);
 
-    const color = d3.scaleOrdinal()
-        .domain(["Sought Treatment", "No Treatment"])
-        .range(["#54278f", "#cbc9e2"]);
+    // Visual style
+    const colorMap = {
+      "Family History": "#4a148c",
+      "No Family History": "#454d55",
+    };
 
-    s_svg.selectAll("path")
-        .data(root.descendants().filter(d => d.depth > 0))
-        .enter()
-        .append("path")
-        .attr("d", arc)
-        .style("fill", d => {
-            if (d.depth === 1) return color(d.data.name);
-            return d3.rgb(color(d.parent.data.name)).brighter(0.5);
-        })
-        .style("stroke", "#fff");
+    const paths = s_svg
+      .selectAll("path")
+      .data(s_root.descendants().filter((d) => d.depth > 0)) // Exclude the center circle
+      .enter()
+      .append("path")
+      .attr("d", arc)
+      .style("fill", (d) => {
+        let p = d;
+        while (p.depth > 1) p = p.parent;
+        const base = colorMap[p.data.name];
+        return d3.interpolateRgb(base, "#fff")(d.depth * 0.22); // Lighten color based on depth
+      })
+      .style("stroke", "#fff")
+      .style("stroke-width", "2px")
+      .style("transition", "opacity 0.2s")
+      // Interactivity
+      .on("mouseover", function (event, d) {
+        const ancestors = d.ancestors(); // Find path from root to current piece
 
+        paths.style("opacity", 0.3); // Fade other paths
 
-    s_svg.selectAll("text")
-        .data(root.descendants().filter(d => d.depth > 0 && (d.x1 - d.x0) > 0.15))
-        .enter()
-        .append("text")
-        .attr("transform", d => {
-            const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-            const y = (d.y0 + d.y1) / 2;
-            return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
-        })
-        .attr("text-anchor", "middle")
-        .attr("dy", "0.35em")
-        .style("font-size", "11px")
-        .style("fill", d => d.depth === 1 ? "white" : "#333")
-        .text(d => d.data.name);
+        // Make hovered path and its ancestors normal color
+        paths
+          .filter((node) => ancestors.indexOf(node) > -1)
+          .style("opacity", 1)
+          .style("filter", "brightness(1.1)");
 
-}).catch(err => console.error(err));
+        s_tooltip.style("opacity", 1).html(`
+                    <div style="font-weight:bold; border-bottom:1px solid #ccc; margin-bottom:5px;">${d.data.name}</div>
+                    <strong>Count:</strong> ${d.value}<br/>
+                    <strong>Share:</strong> ${((d.value / s_root.value) * 100).toFixed(1)}%
+                `);
+      })
+      .on("mousemove", (event) => {
+        s_tooltip
+          .style("left", event.pageX + 15 + "px")
+          .style("top", event.pageY - 28 + "px");
+      })
+      .on("mouseout", function () {
+        paths.style("opacity", 1).style("filter", "none");
+        s_tooltip.style("opacity", 0);
+      });
+
+    // Labels
+    s_svg
+      .selectAll("text")
+      .data(
+        s_root.descendants().filter((d) => d.depth > 0 && d.x1 - d.x0 > 0.18),
+      ) 
+      .enter()
+      .append("text")
+      .attr("transform", (d) => {
+        // Calculate the center point of each arc to place the text
+        const angle = (((d.x0 + d.x1) / 2) * 180) / Math.PI;
+        const radius = (d.y0 + d.y1) / 2;
+
+        const x = Math.cos(((angle - 90) * Math.PI) / 180) * radius;
+        const y = Math.sin(((angle - 90) * Math.PI) / 180) * radius;
+
+        return `translate(${x}, ${y})`;
+      })
+      .attr("text-anchor", "middle")
+      .attr("dy", "0.35em")
+      .style("font-size", "10px")
+      .style("font-weight", "800")
+      .style("fill", (d) => (d.depth === 1 ? "#fff" : "#1a1a1a"))
+      .style("pointer-events", "none")
+      .text((d) => d.data.name);
+  });
