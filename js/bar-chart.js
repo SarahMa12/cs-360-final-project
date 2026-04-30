@@ -24,7 +24,7 @@ const featureLabels = {
 
 const companyOrder = ["1-5", "6-25", "26-100", "100-500", "500-1000", "More than 1000"];
 
-d3.csv("../data/cleaned_data.csv").then(data => {
+d3.csv("data/cleaned_data.csv").then(data => {
 
     const processedData = companyOrder.map(size => {
         const group = data.filter(d => d.no_employees === size);

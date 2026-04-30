@@ -22,7 +22,7 @@ const colorScale = d3.scaleSequential(d3.interpolatePurples).domain([0, 6]);
 
 Promise.all([
     d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"),
-    d3.csv("../data/cleaned_data.csv")
+    d3.csv("data/cleaned_data.csv")
 ]).then(([topoData, csvData]) => {
     
     const states = topojson.feature(topoData, topoData.objects.states).features;
