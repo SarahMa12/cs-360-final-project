@@ -17,12 +17,12 @@ let selectedState = null; // Tracks which state is clicked on the map
 
 // Domain for categorical axes and features for bar chart
 const companyOrder = [
-  "1-5",
-  "6-25",
-  "26-100",
-  "100-500",
-  "500-1000",
   "More than 1000",
+  "500-1000",
+  "100-500",
+  "26-100",
+  "6-25",
+  "1-5",
 ];
 const features = ["benefits_n", "care_n", "wellness_n", "help_n", "anon_n"];
 const featureLabels = {
@@ -55,7 +55,7 @@ const bY0 = d3
   .scaleBand()
   .domain(companyOrder)
   .range([0, bHeight])
-  .padding(0.15);
+  .padding(0.3);
 
 const bY1 = d3
   .scaleBand()
@@ -108,12 +108,12 @@ Promise.all([
         const metrics = stateMetrics.get(d.properties.name);
         return metrics ? colorScale(metrics.avgScore) : "#f0f0f0"; // If no data, make it gray
       })
-      .attr("stroke", "#ffffff")
-      .attr("stroke-width", 0.5)
+      .attr("stroke", "#000000")
+      .attr("stroke-width", 0.75)
       .style("cursor", "pointer")
       .on("mouseover", function (event, d) {
         const m = stateMetrics.get(d.properties.name);
-        d3.select(this).attr("stroke-width", 2);
+        d3.select(this).attr("stroke-width", 2.5);
         tooltip
           .style("opacity", 1)
           .html(
@@ -125,8 +125,11 @@ Promise.all([
           .style("left", event.pageX + 15 + "px")
           .style("top", event.pageY - 28 + "px"),
       )
-      .on("mouseout", function () {
-        d3.select(this).attr("stroke-width", 0.5);
+      .on("mouseout", function (event, d) {
+        // Only shrink the border if it's not the currently selected state
+        if (selectedState !== d.properties.name) {
+          d3.select(this).attr("stroke-width", 0.75);
+        }
         tooltip.style("opacity", 0);
       })
       .on("click", function (event, d) {
@@ -134,11 +137,11 @@ Promise.all([
         const stateName = d.properties.name;
         if (selectedState === stateName) {
           selectedState = null;
-          d3.selectAll("path").style("opacity", 1);
+          d3.selectAll("path").style("opacity", 1).attr("stroke-width", 0.75);
         } else {
           selectedState = stateName;
-          d3.selectAll("path").style("opacity", 0.3);
-          d3.select(this).style("opacity", 1);
+          d3.selectAll("path").style("opacity", 0.3).attr("stroke-width", 0.75);
+          d3.select(this).style("opacity", 1).attr("stroke-width", 4);
         }
         updateBarChart(selectedState); // Trigger bar chart update
       });
@@ -147,12 +150,12 @@ Promise.all([
     const legend = d3
       .legendColor()
       .labelFormat(d3.format(".2f"))
-      .title("Avg Support Score")
+      .title("Support Score")
       .scale(colorScale)
       .cells(6);
     mapSvg
       .append("g")
-      .attr("transform", `translate(${mWidth - 140}, ${mHeight - 160})`)
+      .attr("transform", `translate(${mWidth - 110}, ${mHeight - 160})`)
       .style("font-size", "22px")
       .call(legend);
 
@@ -187,7 +190,7 @@ Promise.all([
       const col = i % 3;
       const g = bLegend
         .append("g")
-        .attr("transform", `translate(${col * 250}, ${row * 45})`);
+        .attr("transform", `translate(${col * 300}, ${row * 45})`);
       
       g.append("rect")
         .attr("width", 22)
@@ -290,7 +293,7 @@ function updateBarChart(filterState) {
     .attr("y", (d) => bY1(d.feature))
     .attr("width", bX(100))
     .attr("height", bY1.bandwidth())
-    .attr("fill", "#f3f4f6")
+    .attr("fill", "#eceef1")
     .on("mouseover", function (event, d) {
       tooltip
         .style("opacity", 1)
@@ -345,4 +348,24 @@ function updateBarChart(filterState) {
 
   bars.exit().remove();
   companyGroups.exit().remove();
+
+  // Add hover effects to Y-axis labels to show sample size
+  barSvg.selectAll(".y-axis .tick text")
+    .style("cursor", "pointer")
+    .on("mouseover", function(event, d) {
+        const count = displayData.filter(row => row.no_employees === d).length;
+        d3.select(this).style("fill", "#004d40").style("font-weight", "bold");
+        tooltip
+            .style("opacity", 1)
+            .html(`<strong>Company Size: ${d}</strong><br/>Responses: ${count}`);
+    })
+    .on("mousemove", (event) =>
+        tooltip
+            .style("left", event.pageX + 15 + "px")
+            .style("top", event.pageY - 28 + "px")
+    )
+    .on("mouseout", function() {
+        d3.select(this).style("fill", "currentColor").style("font-weight", "normal");
+        tooltip.style("opacity", 0);
+    });
 }
