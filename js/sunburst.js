@@ -1,7 +1,7 @@
 // Margins
 const s_svgWidth = 1000;
-const s_svgHeight = 850;
-const s_radius = Math.min(s_svgWidth, s_svgHeight) / 2 - 60;
+const s_svgHeight = 900;
+const s_radius = Math.min(s_svgWidth, s_svgHeight) / 2 - 40;
 
 const s_svg = d3
   .select("#sunburst-container")
@@ -26,7 +26,7 @@ d3.csv("data/cleaned_data.csv")
         treatment: (d.treatment || "").trim(),
       }));
 
-      // Create nested groups for sunburst levels
+    // Create nested groups for sunburst levels
     const nested = d3.groups(
       cleanedData,
       (d) =>
@@ -137,10 +137,26 @@ d3.csv("data/cleaned_data.csv")
         return `translate(${x}, ${y})`;
       })
       .attr("text-anchor", "middle")
-      .attr("dy", "0.35em")
-      .style("font-size", "10px")
+      .style("font-size", "13px")
       .style("font-weight", "800")
       .style("fill", (d) => (d.depth === 1 ? "#fff" : "#1a1a1a"))
       .style("pointer-events", "none")
-      .text((d) => d.data.name);
+      .each(function(d) {
+          const text = d3.select(this);
+          const name = d.data.name;
+          const words = name.split(/\s+/);
+          
+          if (words.length > 1 && d.depth === 1) {
+              // Wrap multi-word labels in the first depth
+              text.text("");
+              words.forEach((word, i) => {
+                  text.append("tspan")
+                      .attr("x", 0)
+                      .attr("dy", i === 0 ? "-0.4em" : "1.1em")
+                      .text(word);
+              });
+          } else {
+              text.text(name).attr("dy", "0.35em");
+          }
+      });
   });

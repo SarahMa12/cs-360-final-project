@@ -1,6 +1,6 @@
 // Margins
-const svgWidth = 1000;
-const svgHeight = 600;
+const svgWidth = 1100;
+const svgHeight = 700;
 
 // Margins for map
 const mapMargin = { top: -20, right: 50, bottom: 50, left: 0 };
@@ -8,9 +8,9 @@ const mWidth = svgWidth - mapMargin.left - mapMargin.right;
 const mHeight = svgHeight - mapMargin.top - mapMargin.bottom;
 
 // Margins for bar chart
-const barMargin = { top: 50, right: 250, bottom: 70, left: 120 };
+const barMargin = { top: 20, right: 30, bottom: 170, left: 210 };
 const bWidth = svgWidth - barMargin.left - barMargin.right;
-const bHeight = 600 - barMargin.top - barMargin.bottom;
+const bHeight = 850 - barMargin.top - barMargin.bottom;
 
 let allData = []; // For CSV data
 let selectedState = null; // Tracks which state is clicked on the map
@@ -44,7 +44,7 @@ const mapSvg = d3
 const barSvg = d3
   .select("#bar-chart-container")
   .append("svg")
-  .attr("viewBox", `0 0 ${svgWidth} 600`)
+  .attr("viewBox", `0 0 ${svgWidth} 850`)
   .append("g")
   .attr("transform", `translate(${barMargin.left}, ${barMargin.top})`);
 
@@ -55,13 +55,13 @@ const bY0 = d3
   .scaleBand()
   .domain(companyOrder)
   .range([0, bHeight])
-  .padding(0.2);
+  .padding(0.15);
 
 const bY1 = d3
   .scaleBand()
   .domain(features)
   .range([0, bY0.bandwidth()])
-  .padding(0.05);
+  .padding(0.02);
 
 const bX = d3.scaleLinear().domain([0, 100]).range([0, bWidth]);
 
@@ -93,7 +93,7 @@ Promise.all([
     const projection = d3
       .geoAlbersUsa()
       .translate([mWidth / 2, mHeight / 2])
-      .scale(1150);
+      .scale(1400);
     const path = d3.geoPath().projection(projection);
 
     // Draw choropleth map
@@ -152,7 +152,8 @@ Promise.all([
       .cells(6);
     mapSvg
       .append("g")
-      .attr("transform", `translate(${mWidth - 120}, ${mHeight - 120})`)
+      .attr("transform", `translate(${mWidth - 140}, ${mHeight - 160})`)
+      .style("font-size", "22px")
       .call(legend);
 
     // Axis for bar chart
@@ -160,26 +161,44 @@ Promise.all([
       .append("g")
       .attr("class", "x-axis")
       .attr("transform", `translate(0, ${bHeight})`)
-      .call(d3.axisBottom(bX).tickFormat((d) => d + "%"));
-    barSvg.append("g").attr("class", "y-axis").call(d3.axisLeft(bY0));
+      .call(d3.axisBottom(bX).tickFormat((d) => d + "%"))
+      .style("font-size", "22px");
+    
+    barSvg.append("g")
+      .attr("class", "y-axis")
+      .call(d3.axisLeft(bY0))
+      .style("font-size", "22px");
+
+    // Add Y-axis label
+    barSvg.append("text")
+      .attr("text-anchor", "middle")
+      .attr("transform", `translate(${-barMargin.left + 50}, ${bHeight / 2}) rotate(-90)`)
+      .style("font-size", "26px")
+      .style("font-weight", "bold")
+      .text("Company Size");
 
     // Bar chart color legend
     const bLegend = barSvg
       .append("g")
-      .attr("transform", `translate(${bWidth + 40}, 0)`);
+      .attr("transform", `translate(0, ${bHeight + 60})`);
+    
     features.forEach((feature, i) => {
+      const row = Math.floor(i / 3); // 3 items per row
+      const col = i % 3;
       const g = bLegend
         .append("g")
-        .attr("transform", `translate(0, ${i * 25})`);
+        .attr("transform", `translate(${col * 250}, ${row * 45})`);
+      
       g.append("rect")
-        .attr("width", 18)
-        .attr("height", 18)
+        .attr("width", 22)
+        .attr("height", 22)
         .attr("fill", bColor(feature));
+      
       g.append("text")
-        .attr("x", 24)
-        .attr("y", 9)
+        .attr("x", 30)
+        .attr("y", 11)
         .attr("dy", "0.35em")
-        .style("font-size", "12px")
+        .style("font-size", "22px")
         .text(featureLabels[feature]);
     });
 

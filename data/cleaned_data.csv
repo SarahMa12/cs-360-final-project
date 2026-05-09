@@ -291,7 +291,6 @@ Age,self_employed,family_history,treatment,work_interfere,no_employees,remote_wo
 26,No,No,Yes,Sometimes,100-500,No,Yes,Yes,Some of them,Some of them,Yes,Female,1.0,1.0,0.0,0.0,0.5,0.25,2.75,California,0,1,0,4,2
 24,No,No,Yes,Rarely,26-100,No,Yes,No,Some of them,Yes,No,Male,1.0,1.0,1.0,0.0,0.5,0.5,4.0,Arizona,0,1,0,3,0
 43,Yes,Yes,Yes,Often,6-25,Yes,Yes,No,Yes,Yes,No,Male,1.0,1.0,0.0,0.0,1.0,1.0,4.0,Massachusetts,1,1,1,2,0
-40,No,Yes,No,Never,More than 1000,No,Yes,Yes,No,Some of them,No,Other,1.0,1.0,1.0,0.5,1.0,0.5,5.0,Virginia,0,1,0,6,2
 30,No,Yes,Yes,Often,More than 1000,No,Yes,Yes,Some of them,No,Yes,Male,1.0,1.0,1.0,0.0,0.5,0.0,3.5,Washington,0,1,0,6,2
 34,No,No,Yes,Sometimes,6-25,No,Yes,Yes,Some of them,No,No,Male,0.5,0.5,0.0,0.0,0.5,0.5,2.0,California,0,1,0,2,2
 27,No,Yes,Yes,Sometimes,100-500,No,Yes,Yes,No,No,No,Male,0.5,0.5,0.0,0.5,0.5,0.5,2.5,Oregon,0,1,0,4,2

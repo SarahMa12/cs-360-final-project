@@ -22,42 +22,44 @@
         parallel coordinates, diverging bar chart, and a sunburst diagram. 
     </p>
     <div id="tooltip"></div>
-    <div class="container">
+    <div class="side-by-side">
         <section id="map-section">
             <h3>Choropleth Map - Mental Health Support Across the U.S.</h3>
             <p><strong>Objective:</strong> How does the availability of mental health resources vary by state in the tech industry?</p>
-            <p>Even though tech companies exist all over the country, access to mental health resources is not the same everywhere. 
-                Some states and cities have stronger healthcare systems, better workplace policies, and more open conversations around mental 
-                health, while others still lack support. This map highlights where employees are more likely to have access to care and where 
-                gaps in support still exist across the U.S.</p>
             <p class="note">(Calculation Note: The Support Score is a on a scale 0–6 derived from survey responses. It sums support resources
                 across six categories: Health Benefits, Care Options, Wellness Programs, Help Resources, Anonymity, and Leave Accessibility. 
                 A score of 6.0 means the support system is comprehensive, while lower scores identify regions with resource gaps.)</p>
             <div id="map-container"></div>
+            <p>Even though tech companies exist all over the country, access to mental health resources is not the same everywhere. 
+                Some states and cities have stronger healthcare systems, better workplace policies, and more open conversations around mental 
+                health, while others still lack support. This map highlights where employees are more likely to have access to care and where 
+                gaps in support still exist across the U.S.</p>
         </section>
-    </div>
 
-    <div class="container">
         <section id="bar-chart-section">
             <h3></h3>
             <p><strong>Objective:</strong> How much mental health support is there in the tech industry, specifically comparing small vs. big companies?</p>
+            <div id="bar-chart-container"></div>
             <p>Different company sizes create different workplace experiences. Large companies may have bigger budgets for benefits and wellness programs, 
                 but smaller companies can sometimes provide more flexibility and closer personal connections. This chart explores how support changes as 
                 companies grow and whether employee well-being keeps up with the fast pace of the tech industry.</p>
-            <div id="bar-chart-container"></div>
         </section>
     </div>
 
     <div class="container">
-        <section id="sunburst-section">
-            <h3>Sunburst Diagram - Demographics and Mental Health Treatment</h3>
-            <p><strong>Objective:</strong> How do personal and demographics relate to mental health in the tech industry?</p>
-            <p>Mental health treatment patterns are not the same across all groups. The sunburst chart shows that individuals with a family history of mental 
-                health conditions are generally more likely to seek treatment across genders. In contrast, people without a family history, especially males,
-                appear less likely to pursue support. These patterns suggest that personal background and social attitudes may both influence how people respond
-                 to mental health challenges and whether they choose to seek help.</p>
-            <div id="sunburst-container"></div>
-        </section>
+        <h3>Sunburst Diagram - Demographics and Mental Health Treatment</h3>
+        <p><strong>Objective:</strong> How do personal and demographics relate to mental health in the tech industry?</p>
+        <div class="sunburst-layout">
+            <section id="sunburst-section">
+                <div id="sunburst-container"></div>
+            </section>
+            <section class="sunburst-text">
+                <p>Mental health treatment patterns are not the same across all groups. The sunburst chart shows that individuals with a family history of mental 
+                    health conditions are generally more likely to seek treatment across genders. In contrast, people without a family history, especially males,
+                    appear less likely to pursue support. These patterns suggest that personal background and social attitudes may both influence how people respond
+                     to mental health challenges and whether they choose to seek help.</p>
+            </section>
+        </div>
     </div>
     
     <div class="container">
