@@ -68,7 +68,7 @@ const bX = d3.scaleLinear().domain([0, 100]).range([0, bWidth]);
 const bColor = d3
   .scaleOrdinal()
   .domain(features)
-  .range(["#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"]);
+  .range(["#e0f2f1", "#b2dfdb", "#4db6ac", "#00897b", "#004d40"]); // Teal/Green shades
 
 // Loading data
 Promise.all([
@@ -216,7 +216,7 @@ function updateBarChart(filterState) {
   d3.select("#bar-chart-section h3").text(
     filterState
       ? `Grouped Bar Chart - Mental Health Support by Company Size in ${filterState}`
-      : "Grouped Bar Chart - Mental Health Support by Company Size in the U.S.)",
+      : "Grouped Bar Chart - Mental Health Support by Company Size in the U.S.",
   );
 
   const infoText = filterState

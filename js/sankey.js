@@ -1,5 +1,5 @@
 let rawData = [];
-let selectionOrder = []; // Track the order of selected features for the sankey diagram
+let selectionOrder = ["tech_company", "coworkers"]; // Track the order of selected features for the sankey diagram
 
 // Margins
 const k_margin = {top: 40, right: 180, bottom: 40, left: 180}; 
@@ -114,11 +114,39 @@ function updateSankey() {
     k_svg.append("g").selectAll("path")
         .data(graph.links)
         .enter().append("path")
+        .attr("class", "sankey-link")
         .attr("d", d3.sankeyLinkHorizontal())
         .attr("stroke", d => d.isPositive ? "#b39ddb" : "#cfd8dc")
         .attr("stroke-width", d => Math.max(1, d.width))
         .attr("fill", "none")
-        .style("opacity", 0.4);
+        .style("opacity", 0.4)
+        .style("transition", "opacity 0.2s, stroke 0.2s")
+        .on("mouseover", function(event, d) {
+            // Focus effect: dim others, highlight this one
+            d3.selectAll(".sankey-link").style("opacity", 0.05);
+            d3.select(this).style("opacity", 0.85).attr("stroke", "#673ab7");
+
+            const sourceName = `${d.source.category}: ${d.source.name}`;
+            const targetName = `${d.target.category}: ${d.target.name}`;
+            const percentSource = ((d.value / d.source.value) * 100).toFixed(1);
+            const percentTarget = ((d.value / d.target.value) * 100).toFixed(1);
+            
+            d3.select("#tooltip")
+                .style("opacity", 1)
+                .html(`
+                    <strong>${percentSource}%</strong> of the <strong>${d.source.name}</strong> group (${d.source.category}) <br/>
+                    go to the <strong>${d.target.name}</strong> group (${d.target.category})
+                `);
+        })
+        .on("mousemove", (event) => {
+            d3.select("#tooltip")
+                .style("left", event.pageX + 15 + "px")
+                .style("top", event.pageY - 28 + "px");
+        })
+        .on("mouseout", function() {
+            d3.selectAll(".sankey-link").style("opacity", 0.4).attr("stroke", d => d.isPositive ? "#b39ddb" : "#cfd8dc");
+            d3.select("#tooltip").style("opacity", 0);
+        });
 
     const node = k_svg.append("g").selectAll("g")
         .data(graph.nodes)
@@ -130,14 +158,38 @@ function updateSankey() {
         .attr("height", d => d.y1 - d.y0).attr("width", d => d.x1 - d.x0)
         .style("fill", d => d.name === "Yes" ? "#4a148c" : "#90a4ae")
         .style("stroke", "#fff")
-        .style("stroke-width", "2px");
+        .style("stroke-width", "2px")
+        .on("mouseover", function(event, d) {
+            d3.select(this).style("filter", "brightness(1.2)");
+            const percent = ((d.value / rawData.length) * 100).toFixed(1);
+            d3.select("#tooltip")
+                .style("opacity", 1)
+                .html(`
+                    <div style="font-weight:bold; border-bottom:1px solid #ddd; margin-bottom:5px;">Group Summary</div>
+                    <strong>${d.category}: ${d.name}</strong><br/>
+                    Count: ${d.value} people<br/>
+                    Share: ${percent}% of total survey
+                `);
+        })
+        .on("mousemove", (event) => {
+            d3.select("#tooltip")
+                .style("left", event.pageX + 15 + "px")
+                .style("top", event.pageY - 28 + "px");
+        })
+        .on("mouseout", function() {
+            d3.select(this).style("filter", "none");
+            d3.select("#tooltip").style("opacity", 0);
+        });
 
     // Labels
     node.append("text")
-        .attr("x", d => d.x0 < k_width / 2 ? d.x1 + 10 : d.x0 - 10)
+        .attr("x", d => d.x0 < k_width / 2 ? d.x1 + 12 : d.x0 - 12)
         .attr("y", d => (d.y1 + d.y0) / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", d => d.x0 < k_width / 2 ? "start" : "end")
-        .text(d => `${d.category}: ${d.name}`)
-        .style("font-size", "11px").style("font-weight", "800");
+        .text(d => {
+            const percent = ((d.value / rawData.length) * 100).toFixed(1);
+            return `${d.category}: ${d.name} (${percent}%)`;
+        })
+        .style("font-size", "14px").style("font-weight", "800");
 }
