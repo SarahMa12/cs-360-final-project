@@ -24,13 +24,14 @@ const companyOrder = [
   "6-25",
   "1-5",
 ];
-const features = ["benefits_n", "care_n", "wellness_n", "help_n", "anon_n"];
+const features = ["benefits_n", "care_n", "wellness_n", "help_n", "anon_n", "leave_n"];
 const featureLabels = {
   benefits_n: "Health Benefits",
   care_n: "Care Options",
   wellness_n: "Wellness Program",
   help_n: "Help Resources",
   anon_n: "Anonymity",
+  leave_n: "Leave Accessibility",
 };
 
 // SVG containers for the two charts
@@ -68,7 +69,7 @@ const bX = d3.scaleLinear().domain([0, 100]).range([0, bWidth]);
 const bColor = d3
   .scaleOrdinal()
   .domain(features)
-  .range(["#e0f2f1", "#b2dfdb", "#4db6ac", "#00897b", "#004d40"]); // Teal/Green shades
+  .range(["#e0f2f1", "#b2dfdb", "#80cbc4", "#4db6ac", "#00796b", "#004d40"]); // Distinct Teal shades (6 total)
 
 // Loading data
 Promise.all([
