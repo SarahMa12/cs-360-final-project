@@ -71,8 +71,8 @@ d3.csv("data/cleaned_data.csv")
 
     // Visual style
     const colorMap = {
-      "Family History": "#4a148c",
-      "No Family History": "#454d55",
+      "Family History": "#4a148c", // Original Purple
+      "No Family History": "#00796b", // Matching Teal
     };
 
     const paths = s_svg
@@ -122,7 +122,7 @@ d3.csv("data/cleaned_data.csv")
     s_svg
       .selectAll("text")
       .data(
-        s_root.descendants().filter((d) => d.depth > 0 && d.x1 - d.x0 > 0.18),
+        s_root.descendants().filter((d) => d.depth > 0 && d.x1 - d.x0 > 0.25),
       ) 
       .enter()
       .append("text")
@@ -137,7 +137,7 @@ d3.csv("data/cleaned_data.csv")
         return `translate(${x}, ${y})`;
       })
       .attr("text-anchor", "middle")
-      .style("font-size", "13px")
+      .style("font-size", "16px")
       .style("font-weight", "800")
       .style("fill", (d) => (d.depth === 1 ? "#fff" : "#1a1a1a"))
       .style("pointer-events", "none")

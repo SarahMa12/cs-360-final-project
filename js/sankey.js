@@ -116,7 +116,7 @@ function updateSankey() {
         .enter().append("path")
         .attr("class", "sankey-link")
         .attr("d", d3.sankeyLinkHorizontal())
-        .attr("stroke", d => d.isPositive ? "#b39ddb" : "#cfd8dc")
+        .attr("stroke", d => d.isPositive ? "#b39ddb" : "#b2dfdb")
         .attr("stroke-width", d => Math.max(1, d.width))
         .attr("fill", "none")
         .style("opacity", 0.4)
@@ -124,7 +124,7 @@ function updateSankey() {
         .on("mouseover", function(event, d) {
             // Focus effect: dim others, highlight this one
             d3.selectAll(".sankey-link").style("opacity", 0.05);
-            d3.select(this).style("opacity", 0.85).attr("stroke", "#673ab7");
+            d3.select(this).style("opacity", 0.65).attr("stroke", d.isPositive ? "#9575cd" : "#4db6ac");
 
             const sourceName = `${d.source.category}: ${d.source.name}`;
             const targetName = `${d.target.category}: ${d.target.name}`;
@@ -144,7 +144,7 @@ function updateSankey() {
                 .style("top", event.pageY - 28 + "px");
         })
         .on("mouseout", function() {
-            d3.selectAll(".sankey-link").style("opacity", 0.4).attr("stroke", d => d.isPositive ? "#b39ddb" : "#cfd8dc");
+            d3.selectAll(".sankey-link").style("opacity", 0.4).attr("stroke", d => d.isPositive ? "#b39ddb" : "#b2dfdb");
             d3.select("#tooltip").style("opacity", 0);
         });
 
@@ -156,7 +156,7 @@ function updateSankey() {
     node.append("rect")
         .attr("x", d => d.x0).attr("y", d => d.y0)
         .attr("height", d => d.y1 - d.y0).attr("width", d => d.x1 - d.x0)
-        .style("fill", d => d.name === "Yes" ? "#4a148c" : "#90a4ae")
+        .style("fill", d => d.name === "Yes" ? "#4a148c" : "#00796b")
         .style("stroke", "#fff")
         .style("stroke-width", "2px")
         .on("mouseover", function(event, d) {

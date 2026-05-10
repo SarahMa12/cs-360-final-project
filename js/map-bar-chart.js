@@ -69,7 +69,7 @@ const bX = d3.scaleLinear().domain([0, 100]).range([0, bWidth]);
 const bColor = d3
   .scaleOrdinal()
   .domain(features)
-  .range(["#e0f2f1", "#b2dfdb", "#80cbc4", "#4db6ac", "#00796b", "#004d40"]); // Distinct Teal shades (6 total)
+  .range(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f"]); // ColorBrewer Set2 (Categorical Best Practice)
 
 // Loading data
 Promise.all([
@@ -274,6 +274,21 @@ function updateBarChart(filterState) {
 
   const combinedGroups = companyGroupsEnter.merge(companyGroups);
 
+  // Add a group-level background/outline to unify the bars in each company size
+  const groupBg = combinedGroups.selectAll(".group-bg-box").data((d) => [d]);
+  groupBg
+    .enter()
+    .insert("rect", ":first-child") // Put it behind the bars
+    .attr("class", "group-bg-box")
+    .merge(groupBg)
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", bWidth)
+    .attr("height", bY0.bandwidth())
+    .attr("fill", "rgba(0, 77, 64, 0.01)") // Almost transparent
+    .attr("stroke", "#4b5563") // Darker gray for more definition
+    .attr("stroke-width", 1.5);
+
   // Separate active (with responses) and inactive groups for styling
   const activeGroups = combinedGroups.filter((d) => d.hasResponses);
   const inactiveGroups = combinedGroups.filter((d) => !d.hasResponses);
@@ -294,7 +309,7 @@ function updateBarChart(filterState) {
     .attr("y", (d) => bY1(d.feature))
     .attr("width", bX(100))
     .attr("height", bY1.bandwidth())
-    .attr("fill", "#eceef1")
+    .attr("fill", "#f8f9fa") // Light neutral gray/white for background bars
     .on("mouseover", function (event, d) {
       tooltip
         .style("opacity", 1)
@@ -322,13 +337,14 @@ function updateBarChart(filterState) {
     .append("rect")
     .attr("class", "data-bar")
     .merge(bars)
+    .attr("stroke", "none") // Remove individual bar outlines
     .on("mouseover", function (event, d) {
       tooltip
         .style("opacity", 1)
         .html(
           `<strong>${featureLabels[d.feature]}</strong><br/>${d.value.toFixed(1)}% availability`,
         );
-      d3.select(this).style("filter", "brightness(0.8)");
+      d3.select(this).style("filter", "brightness(0.9)");
     })
     .on("mousemove", (event) =>
       tooltip
