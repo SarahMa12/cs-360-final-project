@@ -40,7 +40,7 @@ d3.csv("data/cleaned_data.csv").then(data => {
         updateSankey(); // Redraw with new column order
     });
 
-    updateSankey(); // Initial draw (will be empty)
+    updateSankey(); // Initial draw
 });
 
 // Function to update the sankey diagram based on current selections

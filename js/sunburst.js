@@ -1,6 +1,6 @@
 // Margins
 const s_svgWidth = 1000;
-const s_svgHeight = 900;
+const s_svgHeight = 850;
 const s_radius = Math.min(s_svgWidth, s_svgHeight) / 2 - 40;
 
 const s_svg = d3
@@ -146,13 +146,13 @@ d3.csv("data/cleaned_data.csv")
           const name = d.data.name;
           const words = name.split(/\s+/);
           
-          if (words.length > 1 && d.depth === 1) {
-              // Wrap multi-word labels in the first depth
+          if (words.length > 1) {
+              // Wrap multi-word labels (Family History and Treatment status)
               text.text("");
               words.forEach((word, i) => {
                   text.append("tspan")
                       .attr("x", 0)
-                      .attr("dy", i === 0 ? "-0.4em" : "1.1em")
+                      .attr("dy", i === 0 ? (words.length > 2 ? "-0.9em" : "-0.4em") : "1.1em")
                       .text(word);
               });
           } else {

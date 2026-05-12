@@ -69,7 +69,7 @@ const bX = d3.scaleLinear().domain([0, 100]).range([0, bWidth]);
 const bColor = d3
   .scaleOrdinal()
   .domain(features)
-  .range(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f"]); // ColorBrewer Set2 (Categorical Best Practice)
+  .range(["#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02"]); // ColorBrewer 6-class Dark2
 
 // Loading data
 Promise.all([
