@@ -135,4 +135,32 @@ a:hover {
 .legend text {
     font-size: 22px;
     fill: #34495e;
-};
+}
+
+/* Methodology Section */
+.methodology-container {
+    text-align: left;
+    margin-top: 40px;
+    padding-bottom: 60px;
+}
+
+.methodology-container section {
+    margin-bottom: 30px;
+}
+
+.methodology-container h4 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    border-left: 4px solid #4699d1;
+    padding-left: 10px;
+}
+
+.methodology-container ul {
+    padding-left: 70px;
+    margin: 10px 0;
+}
+
+.methodology-container li {
+    margin-bottom: 8px;
+}

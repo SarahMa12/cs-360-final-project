@@ -88,6 +88,46 @@
     <script src="js/sankey.js"></script>
 
     <h3>Methodology</h3>
-    <p></p>
+    <div class="methodology-container">
+        <section>
+            <h4>Data Sources & Processing</h4>
+            <p>
+                The dataset used for this project is the <strong>OSMI Mental Health in Tech Survey</strong>. 
+                Data cleaning was performed using <strong>Python (Pandas)</strong> to filter for respondents within the 
+                United States, normalize gender categories, and handle missing values in workplace-related columns. 
+                The final cleaned dataset contains 737 entries.
+            </p>
+        </section>
+
+        <section>
+            <h4>Metrics & Features</h4>
+            <ul>
+                <li><strong>Support Score:</strong> A metric (0–6) derived by aggregating six key resource categories: 
+                    Health Benefits, Care Options, Wellness Programs, Help Resources, Anonymity, and Leave Accessibility.</li>
+                <li><strong>Demographics:</strong> Age, Cleaned Gender, and Family History of mental health conditions.</li>
+                <li><strong>Workplace Conditions:</strong> Company size, remote work status, industry type (Tech vs. Non-tech), 
+                    and comfort levels discussing mental health with supervisors and coworkers.</li>
+                <li><strong>Outcome Variable:</strong> Treatment-seeking status (Yes/No).</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>Tools & Libraries</h4>
+            <ul>
+                <li><strong>D3.js (v7):</strong> Used for data binding and rendering all SVG-based visualizations.</li>
+                <li><strong>TopoJSON & D3-Geo:</strong> Employed for rendering the U.S. choropleth map.</li>
+                <li><strong>D3-Sankey:</strong> Used to visualize the flow between workplace conditions and treatment outcomes.</li>
+                <li><strong>D3-Legend:</strong> Implemented for color scale and categorical legends.</li>
+                <li><strong>Python (Pandas/NumPy):</strong> Used for initial data exploration and preprocessing.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>AI Usage</h4>
+            <p>
+                Gemini was used for brainstorming optimal visualization strategies. For example, it recommended transitioning from a parallel coordinates plot to a Sankey diagram to better represent categorical (Yes/No) data relationships. Gemini was also used to assist in implementing and troubleshooting complex interactive elements.
+            </p>
+        </section>
+    </div>
 </body>
 </html>
